@@ -10,8 +10,8 @@ local settings = {
     speedOn = false,
     brakeOn = false,
     extraDownforce = false,
-    accelPower = 0.6, 
-    maxSpeed = 160
+    accelPower = 1, 
+    maxSpeed = 1000
 }
 
 local PCD_MULTIPLIER = 4.05 
@@ -20,18 +20,18 @@ ScreenGui.Parent = game.CoreGui
 MainFrame.Parent = ScreenGui
 MainFrame.BackgroundColor3 = Color3.fromRGB(15, 10, 10)
 MainFrame.Position = UDim2.new(0.05, 0, 0.4, 0)
-MainFrame.Size = UDim2.new(0, 260, 0, 480) -- Zwiększone pod napis
+MainFrame.Size = UDim2.new(0, 260, 0, 480)
 MainFrame.Active = true
 MainFrame.Draggable = true
 
 Title.Parent = MainFrame
 Title.Size = UDim2.new(1, 0, 0, 35)
-Title.BackgroundColor3 = Color3.fromRGB(40, 0, 0)
-Title.Text = "PCD HYPER-SONIC [X]"
+Title.BackgroundColor3 = Color3.fromRGB(60, 0, 0)
+Title.Text = "Cheat PCD (TT:Hubertkowalski309)"
 Title.TextColor3 = Color3.new(1, 1, 1)
 Title.Font = Enum.Font.GothamBold
 
--- Systemowe
+-- Przyciski X / _
 CloseBtn.Parent = MainFrame; CloseBtn.Size = UDim2.new(0, 30, 0, 30); CloseBtn.Position = UDim2.new(1, -30, 0, 2); CloseBtn.Text = "X"; CloseBtn.BackgroundColor3 = Color3.fromRGB(200, 0, 0)
 MinBtn.Parent = MainFrame; MinBtn.Size = UDim2.new(0, 30, 0, 30); MinBtn.Position = UDim2.new(1, -65, 0, 2); MinBtn.Text = "_"; MinBtn.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
 OpenBtn.Parent = ScreenGui; OpenBtn.Size = UDim2.new(0, 100, 0, 30); OpenBtn.Position = UDim2.new(0, 10, 0, 10); OpenBtn.Text = "[ OTWÓRZ ]"; OpenBtn.Visible = false
@@ -60,13 +60,13 @@ MakeToggle("HAMOWANIE (S)", UDim2.new(0.1, 0, 0.26, 0), function(v) settings.bra
 local function MakeSlider(name, pos, isPower)
     local lab = Instance.new("TextLabel", MainFrame)
     lab.Position = pos; lab.Size = UDim2.new(1, 0, 0, 20); lab.TextColor3 = Color3.new(1, 1, 1); lab.BackgroundTransparency = 1
-    lab.Text = isPower and name..": 0.6" or name..": 160"
+    lab.Text = isPower and name..": 0.5" or name..": 160"
 
     local bg = Instance.new("TextButton", MainFrame)
     bg.Position = pos + UDim2.new(0.1, 0, 0, 22); bg.Size = UDim2.new(0.8, 0, 0, 10); bg.BackgroundColor3 = Color3.fromRGB(50, 50, 50); bg.Text = ""
 
     local f = Instance.new("Frame", bg)
-    f.Size = UDim2.new(isPower and 0.03 or 0.1, 0, 1, 0); f.BackgroundColor3 = isPower and Color3.new(1, 0.5, 0) or Color3.new(0, 1, 0.5); f.BorderSizePixel = 0
+    f.Size = UDim2.new(isPower and 0.05 or 0.16, 0, 1, 0); f.BackgroundColor3 = isPower and Color3.new(1, 0.2, 0) or Color3.new(0.6, 0, 1); f.BorderSizePixel = 0
 
     bg.MouseButton1Down:Connect(function()
         local con
@@ -75,10 +75,10 @@ local function MakeSlider(name, pos, isPower)
                 local x = math.clamp((game:GetService("UserInputService"):GetMouseLocation().X - bg.AbsolutePosition.X) / bg.AbsoluteSize.X, 0, 1)
                 f.Size = UDim2.new(x, 0, 1, 0)
                 if isPower then
-                    settings.accelPower = 0.1 + (x * 19.9)
+                    settings.accelPower = 0.1 + (x * 19.9) -- MAX 20
                     lab.Text = name .. ": " .. math.floor(settings.accelPower * 10) / 10
                 else
-                    settings.maxSpeed = math.floor(130 + (x * 870))
+                    settings.maxSpeed = math.floor(130 + (x * 870)) -- MAX 1000
                     lab.Text = name .. ": " .. settings.maxSpeed
                 end
             end
@@ -89,18 +89,18 @@ end
 MakeSlider("MOC TURBO", UDim2.new(0, 0, 0.40, 0), true)
 MakeSlider("LIMIT KM/H", UDim2.new(0, 0, 0.55, 0), false)
 
--- OPIS OPTYMALNYCH USTAWIEŃ
+-- RAMKA Z OSTRZEŻENIEM O BANIE
 local WarnBox = Instance.new("Frame", MainFrame)
-WarnBox.Size = UDim2.new(0.9, 0, 0, 80); WarnBox.Position = UDim2.new(0.05, 0, 0.78, 0)
+WarnBox.Size = UDim2.new(0.9, 0, 0, 85); WarnBox.Position = UDim2.new(0.05, 0, 0.78, 0)
 WarnBox.BackgroundColor3 = Color3.fromRGB(40, 0, 0); WarnBox.BorderSizePixel = 1
 
 local WarnText = Instance.new("TextLabel", WarnBox)
 WarnText.Size = UDim2.new(1, -10, 1, -10); WarnText.Position = UDim2.new(0, 5, 0, 5)
 WarnText.BackgroundTransparency = 1; WarnText.TextColor3 = Color3.new(1, 0.8, 0); WarnText.Font = Enum.Font.GothamBold
 WarnText.TextSize = 12; WarnText.TextWrapped = true
-WarnText.Text = "OPTYMALNA PREDKOSC ABY NIE DOSTAC BANA PO 1 SEK:\n\nMOC TURBO: 0.6\nMAX KM/H: 160"
+WarnText.Text = "OPTYMALNA PRĘDKOŚĆ ABY NIE DOSTAĆ BANA PO 1 SEK:\n\nMOC TURBO: 0.5\nMAX KM/H: 160"
 
--- FIZYKA
+-- FIZYKA HYPER-SONIC
 connections.Loop = game:GetService("RunService").Heartbeat:Connect(function()
     local p = game.Players.LocalPlayer
     local s = p.Character and p.Character:FindFirstChild("Humanoid") and p.Character.Humanoid.SeatPart
@@ -110,12 +110,15 @@ connections.Loop = game:GetService("RunService").Heartbeat:Connect(function()
         
         if settings.speedOn and u:IsKeyDown(Enum.KeyCode.W) and not u:GetFocusedTextBox() then
             if speed < settings.maxSpeed then
-                local boost = (settings.accelPower * 0.4) + ((settings.maxSpeed - speed) / 2000)
+                -- Potężny przelicznik siły pod moc 20
+                local boost = (settings.accelPower * 0.45) + ((settings.maxSpeed - speed) / 2500)
                 s.AssemblyLinearVelocity = s.AssemblyLinearVelocity + (s.CFrame.LookVector * boost)
             else
+                -- Blokada na wybranej prędkości (nawet 1000)
                 local targetVel = (settings.maxSpeed * PCD_MULTIPLIER) / 3.6
                 s.AssemblyLinearVelocity = s.CFrame.LookVector * targetVel
             end
+            -- Auto-docisk (żebyś nie wystartował w niebo)
             s.AssemblyLinearVelocity = s.AssemblyLinearVelocity + Vector3.new(0, -0.4, 0)
         end
         
@@ -124,7 +127,7 @@ connections.Loop = game:GetService("RunService").Heartbeat:Connect(function()
         end
 
         if settings.brakeOn and u:IsKeyDown(Enum.KeyCode.S) and not u:GetFocusedTextBox() then
-            s.AssemblyLinearVelocity = s.AssemblyLinearVelocity * 0.965
+            s.AssemblyLinearVelocity = s.AssemblyLinearVelocity * 0.97
         end
     end
 end)
